@@ -1,17 +1,48 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <input v-model="inputs.title" type="text">
+    <input v-model="inputs.date" type="date">
+    <input v-model="inputs.time" type="time">
+    <button @click="addDeadline">Add Deadline</button>
+    <button @click="deleteU">Remove</button>
+
+    <div v-for="d in deadlines" :key="d.id">
+      <clock 
+        style="margin-top: 40px;"
+        :deadline="d.date + ' ' + d.time " :title="d.title"></clock>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import clock from './components/clock'
+import store from './storeapi'
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  components: {clock},
+  data () {
+    return {
+      deadlines: [],
+      inputs: {
+        title: '',
+        date: '',
+        time: ''
+      }
+    }
+  },
+  mounted() {
+    this.deadlines = store.get('deadlines')
+  },
+  methods: {
+    addDeadline: function () {
+      this.deadlines = store.add('deadlines', this.inputs)
+    },
+    get: function () {
+      this.deadlines = store.get('deadlines')
+    },
+    deleteU: function () {
+      this.deadlines = store.remove('deadlines')
+    }
   }
 }
 </script>

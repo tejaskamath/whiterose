@@ -9,6 +9,10 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "datejs": "^1.0.0-rc3",
+    "moment": "^2.27.0",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^9.0.2",
     "vue": "^2.6.11"
   },
   "devDependencies": {
