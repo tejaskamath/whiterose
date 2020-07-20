@@ -56,7 +56,8 @@ export default {
   },
   computed: {
     clock: function () {
-      return this.getRemTime(this.deadline, this.time.format('YYYY-MM-DD HH:mm:ss'))
+      let deadline = moment.unix(this.deadline).format('YYYY-MM-DD HH:mm:ss')
+      return this.getRemTime(deadline, this.time.format('YYYY-MM-DD HH:mm:ss'))
     }
   },
   methods: {

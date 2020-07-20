@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <img style="margin: 0px auto 40px auto" width="50" height="50" src="./assets/whiterose-logo.svg">
+    {{inputs.datetime}}
     <b-field style="margin: 12px auto">
       <b-input v-model="inputs.title" placeholder="Enter Task"></b-input>
       <b-datetimepicker
@@ -25,8 +26,9 @@
 </template>
 
 <script>
+import moment from 'moment'
 import clock from './components/clock'
-import store from './storeapi'
+import store from 'storerestapi'
 export default {
   name: 'App',
   components: {clock},
@@ -49,17 +51,25 @@ export default {
   mounted() {
     this.deadlines = store.get('deadlines')
   },
+  computed: {
+    updatedInputs: function () {
+      return {
+        title: this.inputs.title,
+        datetime: moment(this.inputs.datetime).unix()
+      }
+    }
+  },
   methods: {
     addDeadline: function () {
-      this.deadlines = store.add('deadlines', this.inputs)
+      moment(this.inputs.datetime).unix()
+      this.deadlines = store.post('deadlines', this.updatedInputs)
       this.inputs.title = '';
-      this.inputs.datetime = '';
     },
     get: function () {
       this.deadlines = store.get('deadlines')
     },
     deleteU: function () {
-      this.deadlines = store.remove('deadlines')
+      this.deadlines = store.delete('deadlines')
     },
     deleteClock: function (index) {
       let did = this.deadlines[index].id
