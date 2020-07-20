@@ -1,7 +1,9 @@
 <template>
   <div>
-    <h3>{{title}}</h3>
-    <h2> 
+    <h3 :class="{zero: index === 0}">
+      {{title}}
+    </h3>
+    <h2 :class="{zero: index === 0}"> 
       <span class="clockPart">
         <p>{{clock.days}}</p>
         <p>days</p>
@@ -29,6 +31,7 @@ export default {
   name: 'clock',
   props: {
     title: {default: 'Deadline'},
+    index: {default: ''},
     deadline: {default: moment().add(1, 'year').format('YYYY-MM-DD HH:mm:ss')}
   },
   data () {
@@ -71,11 +74,35 @@ export default {
   .clockPart {
     display: inline-flex;
     flex-direction: column;
-    p { margin: 0px; font-size: 40px;}
+    p { margin: 0px;}
     p:nth-child(2) { 
       font-size: 14px; 
       margin-top: 8px;
       font-weight: 300;
     }
+  }
+  span:first-child { font-weight: 600; }
+  span:nth-child(2) { font-weight: 500; }
+  span:nth-child(3) { font-weight: 400; }
+  span:nth-child(4) { font-weight: 300; }
+  h2, h3 {
+    color: white;
+    font-family: Rajdhani, sans-serif;
+  }
+  h2.zero {
+    font-size: 60px;
+    p:nth-child(2) { 
+      font-size: 16px; 
+      margin-top: 8px;
+      font-weight: 300;
+    }
+  }
+  h2:not(.zero) {
+    font-size: 30px;
+  }
+  h3.zero {
+    font-size: 24px;
+    font-weight: 200;
+    letter-spacing: 0.5px;
   }
 </style>

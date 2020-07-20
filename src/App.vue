@@ -1,15 +1,24 @@
 <template>
   <div id="app">
-    <input v-model="inputs.title" type="text">
-    <input v-model="inputs.date" type="date">
-    <input v-model="inputs.time" type="time">
-    <button @click="addDeadline">Add Deadline</button>
-    <button @click="deleteU">Remove</button>
-
-    <div v-for="d in deadlines" :key="d.id">
+    <b-field style="margin: auto">
+      <b-input v-model="inputs.title" placeholder="Enter Task"></b-input>
+      <b-datetimepicker
+          v-model="inputs.datetime"
+          :minDateTime="minDateTime"
+          :show-week-number="showWeekNumber"
+          placeholder="Select Deadline Date"
+          icon="calendar-today"
+          trap-focus>
+      </b-datetimepicker>
+      <p class="control">
+        <b-button @click="addDeadline" type="is-primary">Add Deadline</b-button>
+      </p>
+    </b-field>
+    <div v-for="(d, i) in deadlines" :key="d.id">
       <clock 
         style="margin-top: 40px;"
-        :deadline="d.date + ' ' + d.time " :title="d.title"></clock>
+        :index="i"
+        :deadline="d.datetime" :title="d.title"></clock>
     </div>
   </div>
 </template>
@@ -21,12 +30,18 @@ export default {
   name: 'App',
   components: {clock},
   data () {
+    const min = new Date()
+            min.setDate(min.getDate() - 7)
+            min.setHours(9)
+            min.setMinutes(0)
+            min.setSeconds(0)
     return {
+      minDateTime: min,
+      showWeekNumber: true,
       deadlines: [],
       inputs: {
         title: '',
-        date: '',
-        time: ''
+        datetime: ''
       }
     }
   },
@@ -47,13 +62,46 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+$primary: #777;
+$blue: #ccc;
+$family-sans-serif: Rajdhani, sans-serif;
+body, html {
+  background: #333;
+  height: 100%;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  padding-top: 90px;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Rajdhani', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
+input {
+  color: white !important;
+  background-color: transparent !important;
+  &::placeholder {
+    color: #aaa;
+    opacity: 1;
+  }
+}
+::placeholder {
+  color: #aaa !important;
+  opacity: 1 !important; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: #aaa !important;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+ color: #aaa !important;
+}
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
 </style>
