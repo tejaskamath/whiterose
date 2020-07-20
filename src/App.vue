@@ -61,7 +61,6 @@ export default {
   },
   methods: {
     addDeadline: function () {
-      moment(this.inputs.datetime).unix()
       this.deadlines = store.post('deadlines', this.updatedInputs)
       this.inputs.title = '';
     },

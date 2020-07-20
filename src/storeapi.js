@@ -3,7 +3,6 @@ let splitUrl = function (str) {
   let split = str.split('/')
   let col = split[0]
   let data = JSON.parse((localStorage.getItem(col) || '[]'))
-  console.log(data)
   return {split, col, data}
 }
 
