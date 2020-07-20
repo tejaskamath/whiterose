@@ -1,7 +1,15 @@
 <template>
-  <div>
-    <h3 :class="{zero: index === 0}">
-      {{title}}
+  <div @mouseover="mouseover = true" @mouseout="mouseover = false">
+    <h3 class="clockHeader" :class="{zero: index === 0}">
+      <span>{{title}}</span>
+      <b-button 
+              @click="$emit('delete', index)"
+              @mouseover="mouseover = true" @mouseout="mouseover = false" 
+              type="is-small is-info"
+              style="border: none; transition: .2s; margin-left: 4px;"
+              :style="{opacity: mouseover ? 1 : 0}"
+              outlined
+              icon-right="delete" />
     </h3>
     <h2 :class="{zero: index === 0}"> 
       <span class="clockPart">
@@ -36,6 +44,7 @@ export default {
   },
   data () {
     return {
+      mouseover: false,
       time: moment(),
       format: 'YYYY-MM-DD HH:mm:ss'
     }
@@ -81,6 +90,10 @@ export default {
       font-weight: 300;
     }
   }
+  .clockHeader button:hover {
+    background: #444 !important;
+    color: white !important;
+  }
   span:first-child { font-weight: 600; }
   span:nth-child(2) { font-weight: 500; }
   span:nth-child(3) { font-weight: 400; }
@@ -88,6 +101,7 @@ export default {
   h2, h3 {
     color: white;
     font-family: Rajdhani, sans-serif;
+    cursor: pointer;
   }
   h2.zero {
     font-size: 60px;
@@ -104,5 +118,18 @@ export default {
     font-size: 24px;
     font-weight: 200;
     letter-spacing: 0.5px;
+    button {
+      margin-left: 12px;
+      font-size: 14px !important;
+      color: white !important;
+    }
+  }
+  h3:not(.zero) {
+    button {
+      margin-left: 8px;
+      padding: 2px 8px;
+      font-size: 10px !important;
+      color: white !important;
+    }
   }
 </style>

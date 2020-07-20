@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <b-field style="margin: auto">
+    <img style="margin: 0px auto 40px auto" width="50" height="50" src="./assets/whiterose-logo.svg">
+    <b-field style="margin: 12px auto">
       <b-input v-model="inputs.title" placeholder="Enter Task"></b-input>
       <b-datetimepicker
           v-model="inputs.datetime"
-          :minDateTime="minDateTime"
-          :show-week-number="showWeekNumber"
+          :min-datetime="minDateTime"
           placeholder="Select Deadline Date"
           icon="calendar-today"
           trap-focus>
@@ -16,6 +16,7 @@
     </b-field>
     <div v-for="(d, i) in deadlines" :key="d.id">
       <clock 
+        @delete="deleteClock(...arguments)"
         style="margin-top: 40px;"
         :index="i"
         :deadline="d.datetime" :title="d.title"></clock>
@@ -31,17 +32,17 @@ export default {
   components: {clock},
   data () {
     const min = new Date()
-            min.setDate(min.getDate() - 7)
-            min.setHours(9)
-            min.setMinutes(0)
-            min.setSeconds(0)
+    min.setDate(min.getDate())
+    min.setHours(min.getHours())
+    min.setMinutes(min.getMinutes())
+    min.setSeconds(min.getSeconds())
     return {
       minDateTime: min,
       showWeekNumber: true,
       deadlines: [],
       inputs: {
         title: '',
-        datetime: ''
+        datetime: new Date()
       }
     }
   },
@@ -51,12 +52,18 @@ export default {
   methods: {
     addDeadline: function () {
       this.deadlines = store.add('deadlines', this.inputs)
+      this.inputs.title = '';
+      this.inputs.datetime = '';
     },
     get: function () {
       this.deadlines = store.get('deadlines')
     },
     deleteU: function () {
       this.deadlines = store.remove('deadlines')
+    },
+    deleteClock: function (index) {
+      let did = this.deadlines[index].id
+      this.deadlines = store.delete(`deadlines/${did}`)
     }
   }
 }
@@ -67,13 +74,18 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
 $primary: #777;
 $blue: #ccc;
+$info: #eee;
 $family-sans-serif: Rajdhani, sans-serif;
 body, html {
-  background: #333;
   height: 100%;
 }
+body, html, #app {
+  background: #333;
+  min-height: 100%;
+}
 #app {
-  padding-top: 90px;
+  padding-top: 40px;
+  padding-bottom: 100px;
   display: flex;
   flex-direction: column;
   font-family: 'Rajdhani', Helvetica, Arial, sans-serif;
