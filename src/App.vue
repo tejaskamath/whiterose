@@ -1,19 +1,23 @@
 <template>
   <div id="app">
     <img style="margin: 0px auto 40px auto" width="50" height="50" src="./assets/whiterose-logo.svg">
-    {{inputs.datetime}}
     <b-field style="margin: 12px auto">
       <b-input v-model="inputs.title" placeholder="Enter Task"></b-input>
       <b-datetimepicker
+          v-if="!showMinutes"
           v-model="inputs.datetime"
           :min-datetime="minDateTime"
           placeholder="Select Deadline Date"
           icon="calendar-today"
           trap-focus>
       </b-datetimepicker>
+      <b-numberinput v-else v-model="minutes" controlsPosition="compact" placeholder="Enter minutes"/>
       <p class="control">
         <b-button @click="addDeadline" type="is-primary">Add Deadline</b-button>
       </p>
+    </b-field>
+    <b-field>
+      <b-checkbox class="is-small" v-model="showMinutes">Enter Minutes</b-checkbox>
     </b-field>
     <div v-for="(d, i) in deadlines" :key="d.id">
       <clock 
@@ -41,7 +45,9 @@ export default {
     return {
       minDateTime: min,
       showWeekNumber: true,
+      showMinutes: false,
       deadlines: [],
+      minutes: '',
       inputs: {
         title: '',
         datetime: new Date()
@@ -53,6 +59,12 @@ export default {
   },
   computed: {
     updatedInputs: function () {
+      if (this.showMinutes) {
+        return {
+          title: this.inputs.title,
+          datetime: moment().add(this.minutes, 'minutes').unix()
+        }
+      }
       return {
         title: this.inputs.title,
         datetime: moment(this.inputs.datetime).unix()
@@ -102,6 +114,10 @@ body, html, #app {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+* {
+  color: white;
 }
 input {
   color: white !important;
