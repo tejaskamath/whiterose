@@ -1,6 +1,9 @@
 <template>
   <div id="app">
     <watch></watch>
+    <p class="timeSaved">
+      Saved {{timeSaved}} minutes 
+    </p>
     <img style="margin: 0px auto 40px auto" width="50" height="50" src="./assets/whiterose-logo.svg">
     <b-field style="margin: 12px auto">
       <b-input v-model="inputs.title" placeholder="Enter Task"></b-input>
@@ -22,6 +25,7 @@
     </b-field>
     <div v-for="(d, i) in deadlines" :key="d.id">
       <clock 
+        @complete="completeTask(...arguments)"
         @delete="deleteClock(...arguments)"
         style="margin-top: 40px;"
         :index="i"
@@ -53,11 +57,13 @@ export default {
       inputs: {
         title: '',
         datetime: new Date()
-      }
+      },
+      completed: []
     }
   },
   mounted() {
     this.deadlines = store.get('deadlines')
+    this.completed = store.get('completed')
   },
   computed: {
     updatedInputs: function () {
@@ -71,6 +77,12 @@ export default {
         title: this.inputs.title,
         datetime: moment(this.inputs.datetime).unix()
       }
+    },
+    timeSaved: function () {
+      let value = this.completed
+        .map(c => c.saved)
+        .reduce((s, v) => s + v, 0)
+      return Math.floor(value / 60)
     }
   },
   methods: {
@@ -86,6 +98,15 @@ export default {
     },
     deleteClock: function (index) {
       let did = this.deadlines[index].id
+      this.deadlines = store.delete(`deadlines/${did}`)
+    },
+    completeTask: function (index) {
+      let did = this.deadlines[index].id
+      let d = store.get(`deadlines/${did}`)
+      let saved = moment.unix(d.datetime).diff(moment(), 'seconds')
+      d.saved = saved
+      this.completed.push(d)
+      store.post('completed', d)
       this.deadlines = store.delete(`deadlines/${did}`)
     }
   }
@@ -117,8 +138,7 @@ body, html, #app {
   text-align: center;
   color: #2c3e50;
 }
-
-* {
+h1, h2, h3, h4, h5, h6, p, .control-label {
   color: white;
 }
 input {
@@ -140,6 +160,13 @@ input {
 
 ::-ms-input-placeholder { /* Microsoft Edge */
  color: #aaa !important;
+}
+
+.timeSaved {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 16px;
 }
 @import "~bulma";
 @import "~buefy/src/scss/buefy";

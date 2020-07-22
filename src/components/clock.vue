@@ -3,6 +3,14 @@
     <h3 class="clockHeader" :class="{zero: index === 0}">
       <span>{{title}}</span>
       <b-button 
+              @click="$emit('complete', index)"
+              @mouseover="mouseover = true" @mouseout="mouseover = false" 
+              type="is-small is-info"
+              style="border: none; transition: .2s; margin-left: 4px;"
+              :style="{opacity: mouseover ? 1 : 0}"
+              outlined
+              icon-right="check" />
+      <b-button 
               @click="$emit('delete', index)"
               @mouseover="mouseover = true" @mouseout="mouseover = false" 
               type="is-small is-info"
@@ -10,6 +18,7 @@
               :style="{opacity: mouseover ? 1 : 0}"
               outlined
               icon-right="delete" />
+      
     </h3>
     <h2 :class="{zero: index === 0}"> 
       <span class="clockPart">
