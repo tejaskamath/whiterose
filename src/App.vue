@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <watch></watch>
     <img style="margin: 0px auto 40px auto" width="50" height="50" src="./assets/whiterose-logo.svg">
     <b-field style="margin: 12px auto">
       <b-input v-model="inputs.title" placeholder="Enter Task"></b-input>
@@ -31,11 +32,12 @@
 
 <script>
 import moment from 'moment'
+import watch from './components/watch'
 import clock from './components/clock'
 import store from 'storerestapi'
 export default {
   name: 'App',
-  components: {clock},
+  components: {clock, watch},
   data () {
     const min = new Date()
     min.setDate(min.getDate())
