@@ -13,7 +13,7 @@
     "core-js": "^3.6.5",
     "datejs": "^1.0.0-rc3",
     "moment": "^2.27.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "sass-loader": "^9.0.2",
     "storerestapi": "^1.0.1",
     "vue": "^2.6.11"
